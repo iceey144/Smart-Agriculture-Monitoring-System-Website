@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Agriculture Monitoring System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script defer src="script.js"></script>
+  <style>
+    /* Hamburger Menu Styles */
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #374151;
+    }
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      background-color: white;
+      position: absolute;
+      top: 4rem;
+      right: 0;
+      width: 100%;
+      max-width: 16rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+    .mobile-menu a, .mobile-menu button {
+      padding: 1rem;
+      text-align: center;
+      color: #374151;
+      font-weight: 500;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .mobile-menu a:hover, .mobile-menu button:hover {
+      background-color: #f3f4f6;
+      color: #15803d;
+    }
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+      .desktop-nav {
+        display: none;
+      }
+      .mobile-menu.active {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="live-region" class="sr-only" aria-live="polite"></div>
+  <nav class="bg-white shadow-lg sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <span class="text-2xl font-bold text-green-800" aria-label="SmartAgri">🌾 SmartAgri</span>
+        </div>
+        <div class="flex items-center">
+          <div class="desktop-nav flex space-x-6">
+            <a href="#home" class="nav-link text-gray-700 hover:text-green-700 font-medium">Home</a>
+            <a href="#monitor" class="nav-link text-gray-700 hover:text-green-700 font-medium">Monitor</a>
+            <a href="#crop-suitability" class="nav-link text-gray-700 hover:text-green-700 font-medium">Crop Suitability</a>
+            <a href="#Suggestions" class="nav-link text-gray-700 hover:text-green-700 font-medium">Suggestion</a>
+            <a href="#about" class="nav-link text-gray-700 hover:text-green-700 font-medium">About</a>
+            <a href="login.html" class="nav-link text-gray-700 hover:text-green-700 font-medium">Login</a>
+            <button id="night-mode-toggle" class="text-gray-700 hover:text-green-700 font-medium" aria-pressed="false">Night Mode</button>
+          </div>
+          <button class="hamburger" aria-label="Toggle mobile menu">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+      <div class="mobile-menu" id="mobile-menu">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#monitor" class="nav-link">Monitor</a>
+        <a href="#crop-suitability" class="nav-link">Crop Suitability</a>
+        <a href="#Suggestions" class="nav-link">Suggestion</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="login.html" class="nav-link">Login</a>
+        <button id="mobile-night-mode-toggle" class="text-gray-700 font-medium" aria-pressed="false">Night Mode</button>
+      </div>
+    </div>
+  </nav>
+
+  <header id="home" class="hero animate gradient-bg text-center py-20 section-3d">
+    <h1 class="text-4xl md:text-5xl font-bold text-green-800 title-animate"><span aria-hidden="true">🌿</span> Smart Agriculture Monitoring</h1>
+    <p class="text-lg text-gray-700 mt-4">Know your crop better, grow smarter! 🚜</p>
+  </header>
+
+  <section id="crop-suitability" class="py-12 bg-green-50 section-3d">
+    <div class="max-w-2xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-gray-800 text-center mb-8">🌱 Crop Suitability Check</h2>
+      <form id="cropForm" class="space-y-6">
+      <div class="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
+        <!-- Crop Selection -->
+        <div class="flex-1">
+          <label for="crop" class="block text-sm font-medium text-gray-700 mb-1">Crop</label>
+          <select id="crop" class="w-full p-3 border border-gray-300 rounded-lg" aria-describedby="crop-error">
+            <option value="" disabled selected>Select crop</option>
+          </select>
+          <span id="crop-error" class="error text-red-500 text-sm hidden">Please select a crop.</span>
+        </div>
+
+        <!-- Soil Type -->
+        <div class="flex-1">
+          <label for="soilType" class="block text-sm font-medium text-gray-700 mb-1">Soil Type</label>
+          <select id="soilType" class="w-full p-3 border border-gray-300 rounded-lg" aria-describedby="soilType-error">
+            <option value="" disabled selected>Select soil type</option>
+            <option value="Loamy">Loamy</option>
+            <option value="Sandy">Sandy</option>
+            <option value="Clay">Clay</option>
+            <option value="Silt">Silt</option>
+          </select>
+          <span id="soilType-error" class="error text-red-500 text-sm hidden">Please select a soil type.</span>
+        </div>
+
+        <!-- Area -->
+        <div class="flex-1">
+          <label for="area" class="block text-sm font-medium text-gray-700 mb-1">Area</label>
+          <select id="area" class="w-full p-3 border border-gray-300 rounded-lg" aria-describedby="area-error">
+            <option value="" disabled selected>Select area</option>
+            <option value="North Field">North Field</option>
+            <option value="South Field">South Field</option>
+            <option value="Coastal Region">Coastal Region</option>
+          </select>
+          <span id="area-error" class="error text-red-500 text-sm hidden">Please select an area.</span>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="flex space-x-4">
+        <button type="submit" class="w-full py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg">🌾 Check Suitability</button>
+        <button type="button" class="w-full py-3 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg" id="resetForm">🔄 Reset</button>
+      </div>
+</form>
+      <div id="output" class="mt-6"></div>
+      <div id="progress" class="hidden mt-4 bg-gray-200 rounded-full h-4">
+        <div class="progress-bar bg-green-600 h-4 rounded-full"></div>
+      </div>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div>
+          <h3 class="text-center text-lg font-semibold text-blue-700 mb-2">🌡 Temperature (°C)</h3>
+          <canvas id="tempLineChart" height="200"></canvas>
+        </div>
+        <div>
+          <h3 class="text-center text-lg font-semibold text-green-700 mb-2">💧 Humidity (%)</h3>
+          <canvas id="humidityLineChart" height="200"></canvas>
+        </div>
+        <div>
+          <h3 class="text-center text-lg font-semibold text-yellow-700 mb-2">🌱 Soil Moisture (%)</h3>
+          <canvas id="moistureLineChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="monitor" class="py-12 bg-white section-3d">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">📡 Sensor Monitor</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+        <div class="bg-green-100 p-6 rounded-lg shadow">
+          <p class="text-lg font-semibold">💧 Soil Moisture</p>
+          <p id="soilMoisture" class="text-2xl font-bold text-green-700">--</p>
+        </div>
+        <div class="bg-yellow-100 p-6 rounded-lg shadow">
+          <p class="text-lg font-semibold">🌡 Temperature</p>
+          <p id="temperature" class="text-2xl font-bold text-yellow-700">--</p>
+        </div>
+        <div class="bg-blue-100 p-6 rounded-lg shadow">
+          <p class="text-lg font-semibold">💦 Humidity</p>
+          <p id="humidity" class="text-2xl font-bold text-blue-700">--</p>
+        </div>
+        <div class="bg-gray-100 p-6 rounded-lg shadow">
+          <p class="text-lg font-semibold">🌧 Rainfall</p>
+          <p id="rainfall" class="text-2xl font-bold text-gray-700">--</p>
+        </div>
+      </div>
+      <button id="refresh-sensors" class="mt-4 py-2 px-4 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg mx-auto block">Refresh Sensors</button>
+    </div>
+  </section>
+
+
+
+  <section id="Suggestions" class="py-12 bg-lime-100 section-3d">
+    <div class="max-w-3xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center text-emerald-800 mb-4">🧑‍🌾 Farmer’s Suggestions</h2>
+      <p class="text-center text-gray-600 mb-6">Based on live sensor data and optimal crop ranges</p>
+      <div id="suggestion-card" class="p-6 rounded-lg shadow-md">
+        <div id="suggestion-content" class="text-gray-800 text-lg space-y-2">
+          <p>Loading suggestions...</p>
+        </div>
+        <span class="suggestion-badge">Smart Tips</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="py-16 bg-white section-3d">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-3xl font-bold text-gray-800 mb-3 text-center">About</h2>
+      <p class="text-lg text-gray-600 text-center">SmartAgri empowers farmers with real-time data to optimize crop growth and sustainability. SmartAgri is your partner in modern farming. With real-time insights on soil, temperature, humidity, and rainfall, we empower farmers to make informed decisions and improve yield sustainably.</p>
+    </div>
+  </section>
+
+  <footer class="bg-green-900 text-white py-10">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-2xl font-bold mb-2" aria-label="SmartAgri">🌿 SmartAgri</h3>
+        <p class="text-gray-300">Empowering sustainable farming with cutting-edge technology.</p>
+      </div>
+      <div class="text-center">
+        <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="#home" class="hover:text-green-300 text-blue-300">Home</a></li>
+          <li><a href="#monitor" class="hover:text-green-300 text-yellow-300">Monitor</a></li>
+          <li><a href="#crop-suitability" class="hover:text-green-300 text-red-600">Crop Suitability</a></li>
+          <li><a href="#Suggestions" class="hover:text-green-300 text-white-600">Suggestion</a></li>
+          <li><a href="#about" class="hover:text-green-300 text-purple-300">About</a></li>
+          <li><a href="login.html" class="hover:text-green-300 text-pink-300">Login</a></li>
+        </ul>
+      </div>
+      <div class="text-right">
+        <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+        <p>Email: <a href="mailto:abc@gmail.com" class="hover:text-white text-blue-300">ABC@smartagri.com</a></p>
+        <p class="text-yellow-300">Phone: +1 (555) 123-4567</p>
+        <div class="flex justify-end space-x-4 mt-2">
+          <a href="https://twitter.com" class="hover:text-white text-blue-400"><i class="fab fa-twitter" aria-label="Twitter"></i></a>
+          <a href="https://facebook.com" class="hover:text-white text-blue-600"><i class="fab fa-facebook" aria-label="Facebook"></i></a>
+          <a href="https://linkedin.com" class="hover:text-white text-blue-800"><i class="fab fa-linkedin" aria-label="LinkedIn"></i></a>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-gray-400 mt-8 text-sm">© 2025 SmartAgri. All rights reserved.</p>
+  </footer>
+
+  <audio controls class="fixed bottom-4 right-4">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="tractor"></div>
+
+  <script>
+    // Hamburger Menu Toggle
+    document.addEventListener('DOMContentLoaded', () => {
+      const hamburger = document.querySelector('.hamburger');
+      const mobileMenu = document.querySelector('#mobile-menu');
+
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        const isOpen = mobileMenu.classList.contains('active');
+        hamburger.setAttribute('aria-expanded', isOpen);
+        hamburger.querySelector('i').classList.toggle('fa-bars');
+        hamburger.querySelector('i').classList.toggle('fa-times');
+      });
+
+      // Close mobile menu when clicking a link
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('active');
+          hamburger.setAttribute('aria-expanded', 'false');
+          hamburger.querySelector('i').classList.add('fa-bars');
+          hamburger.querySelector('i').classList.remove('fa-times');
+        });
+      });
+
+      // Close mobile menu when clicking night mode toggle
+      document.getElementById('mobile-night-mode-toggle').addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.querySelector('i').classList.add('fa-bars');
+        hamburger.querySelector('i').classList.remove('fa-times');
+      });
+    });
+
+      let tempChart, humidityChart, moistureChart;
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const timeLabels = [];
+    const maxPoints = 24;
+
+    const generateChartConfig = (label, borderColor) => ({
+      type: 'line',
+      data: {
+        labels: timeLabels,
+        datasets: [{
+          label: label,
+          data: [],
+          borderColor: borderColor,
+          fill: false,
+          tension: 0.3,
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { title: { display: true, text: 'Time' }},
+          y: { title: { display: true, text: label }}
+        }
+      }
+    });
+
+    tempChart = new Chart(document.getElementById('tempLineChart'), generateChartConfig("Temperature (°C)", 'rgba(255, 99, 132, 1)'));
+    humidityChart = new Chart(document.getElementById('humidityLineChart'), generateChartConfig("Humidity (%)", 'rgba(75, 192, 192, 1)'));
+    moistureChart = new Chart(document.getElementById('moistureLineChart'), generateChartConfig("Soil Moisture (%)", 'rgba(255, 205, 86, 1)'));
+
+    setInterval(() => {
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (timeLabels.length >= maxPoints) timeLabels.shift();
+      timeLabels.push(now);
+
+      const newTemp = 20 + Math.random() * 10;
+      const newHumidity = 40 + Math.random() * 20;
+      const newMoisture = 30 + Math.random() * 30;
+
+      [tempChart, humidityChart, moistureChart].forEach((chart, i) => {
+        const newValue = [newTemp, newHumidity, newMoisture][i];
+        const dataset = chart.data.datasets[0];
+        if (dataset.data.length >= maxPoints) dataset.data.shift();
+        dataset.data.push(newValue);
+        chart.update();
+      });
+    }, 5000);
+  });
+
+  </script>
+</body>
+</html>

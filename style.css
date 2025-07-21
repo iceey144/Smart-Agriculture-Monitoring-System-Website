@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  transition: background 1s ease-in-out;
+  background: linear-gradient(135deg, hsl(149, 80%, 90%), hsl(55, 92%, 95%));
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://source.unsplash.com/random/1600x900/?agriculture') no-repeat center center/cover;
+  opacity: 0.08;
+  z-index: -1;
+}
+
+.night-mode {
+  background-color: #0f172a;
+  color: hsl(210, 46%, 60%);
+}
+
+.night-mode .hero.gradient-bg {
+  background: linear-gradient(to right, hsl(222, 38%, 72%), hsl(217, 38%, 87%));
+}
+
+.hero.gradient-bg {
+  background: linear-gradient(to right, #a7f3d0, hsl(157, 53%, 87%));
+  transition: background 1s ease-in-out;
+}
+
+.grid > div:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.progress {
+  width: 100%;
+}
+
+.progress-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+button {
+  box-shadow: 0 4px 8px rgba(0, 128, 0, 0.15);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  box-shadow: 0 6px 12px rgba(0, 128, 0, 0.25);
+  transform: scale(1.08);
+}
+
+input[type="text"], select {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus, select:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3);
+}
+
+.nav-link {
+  position: relative;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: #22c55e;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link:hover {
+  transform: translateY(-2px);
+  color: #22c55e;
+}
+
+.section-3d {
+  transform: perspective(1000px) translateZ(0);
+  transition: transform 0.5s ease;
+}
+
+.section-3d:hover {
+  transform: perspective(1000px) translateZ(20px);
+}
+
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+  animation: drift 50s linear infinite;
+}
+
+@keyframes drift {
+  from { transform: translateX(-200px); }
+  to { transform: translateX(200vw); }
+}
+
+.cloud:nth-child(1) { width: 120px; height: 70px; top: 15%; left: -120px; animation-duration: 45s; }
+.cloud:nth-child(2) { width: 180px; height: 90px; top: 30%; left: -180px; animation-duration: 50s; }
+.cloud:nth-child(3) { width: 100px; height: 60px; top: 55%; left: -100px; animation-duration: 35s; }
+
+.tractor {
+  position: fixed;
+  bottom: 30px;
+  left: -120px;
+  width: 100px;
+  height: 60px;
+  background: url('https://img.icons8.com/color/96/tractor.png') no-repeat center/contain;
+  animation: drive 25s linear infinite;
+  z-index: 10;
+  transform: rotate(0deg);
+}
+
+@keyframes drive {
+  0% { transform: translateX(-120px) rotate(0deg); }
+  10% { transform: translateX(10vw) rotate(2deg); }
+  20% { transform: translateX(20vw) rotate(-2deg); }
+  90% { transform: translateX(90vw) rotate(2deg); }
+  100% { transform: translateX(100vw) rotate(0deg); }
+}
+
+audio {
+  display: block;
+  max-width: 200px;
+}
+
+.title-animate {
+  animation: fade 1.5s ease-out forwards;
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  60% {
+    opacity: 0.6;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pie-chart, .bar-chart {
+  display: inline-block;
+}
+
+#suggestion-card {
+  transition: transform 0.5s ease, box-shadow 0.3s ease;
+  background: linear-gradient(to top right, #f0fdf4, #dcfce7);
+  border-left: 6px solid #22c55e;
+}
+#suggestion-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(34, 197, 94, 0.2);
+}
+.suggestion-badge {
+  display: inline-block;
+  background-color: #16a34a;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2em 0.6em;
+  border-radius: 9999px;
+  margin-top: 0.5rem;
+}
+
+
+nav a.nav-link[href="login.html"],
+nav span.nav-link {
+  color: #047857;
+  font-weight: 600;
+}
+
+footer a[href="login.html"] {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+canvas {
+  max-width: 300px;
+  max-height: 300px;
+  margin: 0 auto;
+}
